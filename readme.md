@@ -1,4 +1,4 @@
-# **`enum_traits`** 
+# **`enum_traits`**
 
 ## **`enum_traits`** for properties of C / C++ enum types
 
@@ -59,3 +59,8 @@ Meson build script provided, e.g. use with ninja backend
 meson build
 ninja -C build
 ```
+
+| Linux Travis| Windows Appveyor|
+| :---: | :---: |
+|gcc-9, clang-7<br>-std=c++17|MSVC 19.21.27702.2<br>/std:c++latest|
+| [![Build Status](https://travis-ci.org/willwray/enum_traits.svg?branch=master)](https://travis-ci.org/willwray/enum_traits) | [![Build status](https://ci.appveyor.com/api/projects/status/gc7js22t8v0e5u9s?svg=true)](https://ci.appveyor.com/project/willwray/enum-traits) |
