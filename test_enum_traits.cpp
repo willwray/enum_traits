@@ -17,22 +17,28 @@ static_assert( ! ltl::is_scoped_enum_v<MAX64> );
 static_assert( ! ltl::is_fixed_enum_v<MAX64> );
 static_assert( ! ltl::is_scoped_enum<MAX64>::value );
 static_assert( ! ltl::is_fixed_enum<MAX64>::value );
+# if not defined(_MSC_VER)
 static_assert( std::is_same_v<std::underlying_type_t<MAX64>, uint64_t> );
 static_assert( std::is_same_v<decltype(ltl::to_underlying( uint64_max)), uint64_t> );
+# endif
 
 enum O {};
 static_assert( ! ltl::is_scoped_enum_v<O> );
 static_assert( ! ltl::is_fixed_enum_v<O> );
 static_assert( ! ltl::is_scoped_enum<O>::value );
 static_assert( ! ltl::is_fixed_enum<O>::value );
+# if not defined(_MSC_VER)
 static_assert( std::is_same_v<std::underlying_type_t<O>, uint32_t> );
 static_assert( std::is_same_v<decltype(ltl::to_underlying(O())), uint32_t> );
+# endif
 
 enum N { n };
 static_assert( ! ltl::is_scoped_enum_v<N> );
 static_assert( ! ltl::is_fixed_enum_v<N> );
+# if not defined(_MSC_VER)
 static_assert( std::is_same_v<std::underlying_type_t<N>, uint32_t> );
 static_assert( std::is_same_v<decltype(ltl::to_underlying(N{})), uint32_t> );
+# endif
 
 enum B : uint8_t { b };
 static_assert( ! ltl::is_scoped_enum_v<B> );
