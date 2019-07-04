@@ -145,7 +145,7 @@ constexpr auto hi16_Int32seq( std::index_sequence<v...> = {} )
         return hi16_Int32seq<Int32>( std::make_index_sequence<nc>{} );
     else
     {
-        constexpr auto hi16_32s = []{
+        constexpr auto hi16_32s = [&]{
             array<Int32, sizeof...(v)> seq{};
             int k = 0;
             for (int i = 16; i != 16 + nb; ++i)
@@ -224,7 +224,7 @@ PTev()
 
     constexpr auto pf = PF;
 
-    constexpr auto count_then_tally = [](auto size)
+    constexpr auto count_then_tally = [=](auto size)
     {
         array<E,size()> tally{};
 
