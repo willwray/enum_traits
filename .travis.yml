@@ -1,0 +1,69 @@
+dist: xenial
+language: python
+python: 3.6
+sudo: required
+
+matrix:
+    include:
+    ##############
+    # GCC
+    ##############
+    - os: linux
+      compiler: gcc
+      env: GCC_VERSION=9
+        - CC=gcc-9
+        - CXX=g++-9
+        - CXX_STANDARD=17
+      addons:
+        apt:
+          sources:
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+          packages: ['g++-9', 'ninja-build']
+
+    ##############
+    # CLANG
+    ##############
+    - os: linux
+      compiler: clang
+      env: CLANG_VERSION=7
+        - CC=clang-7
+        - CXX=clang++-7
+        - CXX_STANDARD=17
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-xenial
+            - llvm-toolchain-trusty-7
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+          packages: ['clang-7', 'libc++-7-dev', 'libc++abi-7-dev', 'ninja-build']
+
+    ##############
+    # OSX / APPLECLANG (Python download failing)
+    ##############
+    #- os: osx
+    #  osx_image: xcode10.1
+    #  env:
+    #    - CXX=clang
+    #    - OSX=1
+    #    - CXX_STANDARD=17
+
+before_install:
+  - echo "Before install"
+  - |
+    git submodule init
+    git submodule update
+  - |
+    if [ "${CLANG_VERSION}" == "7" ]; then
+      export CXXFLAGS="-stdlib=libc++"
+    fi
+
+install:
+  - mkdir -p build
+  - pip install meson
+
+script:
+  - which $CXX
+  - $CXX --version
+  - meson build
+  - cd build
+  - ninja
