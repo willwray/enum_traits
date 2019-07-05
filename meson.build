@@ -12,7 +12,7 @@ test('test enum traits',
              dependencies: enum_traits_dep)
 )
 
-test('test enumerator traits',
-  executable('test_enumerator_traits', 'test_enumerator_traits.cpp',
-             dependencies: enum_traits_dep)
-)
+#test('test enumerator traits',
+#  executable('test_enumerator_traits', 'test_enumerator_traits.cpp',
+#             dependencies: enum_traits_dep)
+#)
