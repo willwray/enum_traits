@@ -79,6 +79,18 @@ enum Y : int;
 static_assert( impl::has_type_typedef_member<ltl::underlying_type<Y>> );
 static_assert( ! impl::has_type_typedef_member<ltl::underlying_type<int>> );
 
+// ltl::to_underlying SFINAE test
+template <auto e, typename = int>
+inline constexpr bool is_int_enum { };
+
+template <auto e>
+inline constexpr bool is_int_enum<e, decltype(ltl::to_underlying(e))> = true;
+
+static_assert( ! is_int_enum<1> );
+enum : int { e };
+static_assert( is_int_enum<e> );
+
+
 int main()
 {
   enum { min32 = INT32_MIN, max32 = INT32_MAX };

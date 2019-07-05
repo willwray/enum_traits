@@ -73,10 +73,13 @@ struct underlying_type<T, true>
 template <typename T>
 struct underlying_type : impl::underlying_type<T> {};
 
+template <typename T>
+using underlying_type_t = typename impl::underlying_type<T>::type;
+
 // to_underlying(e): convenience cast from enum value e to its underlying type
 //
 template <typename E>
-constexpr auto to_underlying(E e) noexcept
+constexpr underlying_type_t<E> to_underlying(E e) noexcept
 {
     return static_cast<std::underlying_type_t<E>>(e);
 }
