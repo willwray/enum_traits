@@ -1,8 +1,8 @@
-# **`enum_traits`**
+# **`enum_traits`** and **`enumerator_traits`**
 
 ## **`enum_traits`** for properties of C / C++ enum types
 
-> C++17. Targets GCC, Clang, MSVC. Namespace `ltl`.
+> C++17. Targets GCC & Clang (MSVC is WIP). Namespace `ltl`.
 
 <details><summary>Copyright &copy; 2019 Will Wray. Distributed under the Boost Software License, V1.0</summary>
 
@@ -39,17 +39,271 @@ Also at [boost.org](http://www.boost.org/LICENSE_1_0.txt) and accompanying file 
 </details>
 
 ```C++
-  ltl::is_scoped_enum<T>;   // Test if type T is a scoped enum (lazy).
-  ltl::is_scoped_enum_v<T>; // Test if type T is a scoped enum (eager).
+  ltl::is_scoped_enum<T>;    // Test if type T is a scoped enum (lazy).
+  ltl::is_scoped_enum_v<T>;  // Test if type T is a scoped enum (eager).
 
-  ltl::is_fixed_enum<T>;    // Test if type T is a 'fixed' enum,
-  ltl::is_fixed_enum_v<T>;  // i.e. an enum  with fixed underlying type.
+  ltl::is_fixed_enum<T>;     // Test if type T is a 'fixed' enum,
+  ltl::is_fixed_enum_v<T>;   // i.e. an enum  with fixed underlying type.
 
-  ltl::underlying_type<T>;  // c++17 port of c++20's improved UB-free
-                            // 'SFINAE-friendly' std::underlying_type.
+  ltl::underlying_type<T>;   // c++17 port of c++20's improved UB-free
+  ltl::underlying_type_t<T>; // 'SFINAE-friendly' std::underlying_type.
 
-  ltl::to_underlying(e);    // Convenience cast to underlying type P1682.
+  ltl::to_underlying(e);     // Convenience cast to underlying type P1682.
 ```
+
+## **`enumerator_traits`** for reflection of enumerated values
+
+> C++17. Targets GCC>=9 and Clang (recent MSVC possible). Namespace `ltl`.
+
+<details><summary>Copyright &copy; 2019 Will Wray. Distributed under LGPL-3.0-or-later.</summary>
+
+```txt
+                   GNU LESSER GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+
+  This version of the GNU Lesser General Public License incorporates
+the terms and conditions of version 3 of the GNU General Public
+License, supplemented by the additional permissions listed below.
+
+  0. Additional Definitions.
+
+  As used herein, "this License" refers to version 3 of the GNU Lesser
+General Public License, and the "GNU GPL" refers to version 3 of the GNU
+General Public License.
+
+  "The Library" refers to a covered work governed by this License,
+other than an Application or a Combined Work as defined below.
+
+  An "Application" is any work that makes use of an interface provided
+by the Library, but which is not otherwise based on the Library.
+Defining a subclass of a class defined by the Library is deemed a mode
+of using an interface provided by the Library.
+
+  A "Combined Work" is a work produced by combining or linking an
+Application with the Library.  The particular version of the Library
+with which the Combined Work was made is also called the "Linked
+Version".
+
+  The "Minimal Corresponding Source" for a Combined Work means the
+Corresponding Source for the Combined Work, excluding any source code
+for portions of the Combined Work that, considered in isolation, are
+based on the Application, and not on the Linked Version.
+
+  The "Corresponding Application Code" for a Combined Work means the
+object code and/or source code for the Application, including any data
+and utility programs needed for reproducing the Combined Work from the
+Application, but excluding the System Libraries of the Combined Work.
+
+  1. Exception to Section 3 of the GNU GPL.
+
+  You may convey a covered work under sections 3 and 4 of this License
+without being bound by section 3 of the GNU GPL.
+
+  2. Conveying Modified Versions.
+
+  If you modify a copy of the Library, and, in your modifications, a
+facility refers to a function or data to be supplied by an Application
+that uses the facility (other than as an argument passed when the
+facility is invoked), then you may convey a copy of the modified
+version:
+
+   a) under this License, provided that you make a good faith effort to
+   ensure that, in the event an Application does not supply the
+   function or data, the facility still operates, and performs
+   whatever part of its purpose remains meaningful, or
+
+   b) under the GNU GPL, with none of the additional permissions of
+   this License applicable to that copy.
+
+  3. Object Code Incorporating Material from Library Header Files.
+
+  The object code form of an Application may incorporate material from
+a header file that is part of the Library.  You may convey such object
+code under terms of your choice, provided that, if the incorporated
+material is not limited to numerical parameters, data structure
+layouts and accessors, or small macros, inline functions and templates
+(ten or fewer lines in length), you do both of the following:
+
+   a) Give prominent notice with each copy of the object code that the
+   Library is used in it and that the Library and its use are
+   covered by this License.
+
+   b) Accompany the object code with a copy of the GNU GPL and this license
+   document.
+
+  4. Combined Works.
+
+  You may convey a Combined Work under terms of your choice that,
+taken together, effectively do not restrict modification of the
+portions of the Library contained in the Combined Work and reverse
+engineering for debugging such modifications, if you also do each of
+the following:
+
+   a) Give prominent notice with each copy of the Combined Work that
+   the Library is used in it and that the Library and its use are
+   covered by this License.
+
+   b) Accompany the Combined Work with a copy of the GNU GPL and this license
+   document.
+
+   c) For a Combined Work that displays copyright notices during
+   execution, include the copyright notice for the Library among
+   these notices, as well as a reference directing the user to the
+   copies of the GNU GPL and this license document.
+
+   d) Do one of the following:
+
+       0) Convey the Minimal Corresponding Source under the terms of this
+       License, and the Corresponding Application Code in a form
+       suitable for, and under terms that permit, the user to
+       recombine or relink the Application with a modified version of
+       the Linked Version to produce a modified Combined Work, in the
+       manner specified by section 6 of the GNU GPL for conveying
+       Corresponding Source.
+
+       1) Use a suitable shared library mechanism for linking with the
+       Library.  A suitable mechanism is one that (a) uses at run time
+       a copy of the Library already present on the user's computer
+       system, and (b) will operate properly with a modified version
+       of the Library that is interface-compatible with the Linked
+       Version.
+
+   e) Provide Installation Information, but only if you would otherwise
+   be required to provide such information under section 6 of the
+   GNU GPL, and only to the extent that such information is
+   necessary to install and execute a modified version of the
+   Combined Work produced by recombining or relinking the
+   Application with a modified version of the Linked Version. (If
+   you use option 4d0, the Installation Information must accompany
+   the Minimal Corresponding Source and Corresponding Application
+   Code. If you use option 4d1, you must provide the Installation
+   Information in the manner specified by section 6 of the GNU GPL
+   for conveying Corresponding Source.)
+
+  5. Combined Libraries.
+
+  You may place library facilities that are a work based on the
+Library side by side in a single library together with other library
+facilities that are not Applications and are not covered by this
+License, and convey such a combined library under terms of your
+choice, if you do both of the following:
+
+   a) Accompany the combined library with a copy of the same work based
+   on the Library, uncombined with any other library facilities,
+   conveyed under the terms of this License.
+
+   b) Give prominent notice with the combined library that part of it
+   is a work based on the Library, and explaining where to find the
+   accompanying uncombined form of the same work.
+
+  6. Revised Versions of the GNU Lesser General Public License.
+
+  The Free Software Foundation may publish revised and/or new versions
+of the GNU Lesser General Public License from time to time. Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.
+
+  Each version is given a distinguishing version number. If the
+Library as you received it specifies that a certain numbered version
+of the GNU Lesser General Public License "or any later version"
+applies to it, you have the option of following the terms and
+conditions either of that published version or of any later version
+published by the Free Software Foundation. If the Library as you
+received it does not specify a version number of the GNU Lesser
+General Public License, you may choose any version of the GNU Lesser
+General Public License ever published by the Free Software Foundation.
+
+  If the Library as you received it specifies that a proxy can decide
+whether future versions of the GNU Lesser General Public License shall
+apply, that proxy's public statement of acceptance of any version is
+permanent authorization for you to choose that version for the
+Library.
+```
+
+[![License](https://img.shields.io/badge/license-boost%201.0-blue.svg)](https://www.boost.org/LICENSE_1_0.txt)
+
+Also at [boost.org](http://www.boost.org/LICENSE_1_0.txt) and accompanying file [LICENSE_1_0.txt](LICENSE_1_0.txt)
+
+</details>
+
+----
+
+```C++
+  ltl::is_enumerated_v<e>; // Test if enum value e corresponds to an
+                           // enumerator of its enum type decltype(e).
+
+  ltl::enumerators_v<E>;   // Array of enumerated values of enum type E
+                           // (see note on duplicate-valued enumerators).
+  ltl::enumerators_t<E>;   // integer_sequence<underlying_type_t<E>,u...>
+                           // of E's enumerators' underlying values u...
+  ltl::enumerators<E>;     // Trait class for enumerated values of E with
+                           // array 'value' and typedef 'type' members.
+```
+
+The array returned by `enumerators_v` is of an internal type, sufficient
+to index,  
+range-for iterate or copy into another container.
+
+## Description
+
+Two header-only libraries of 'type traits'; template-based utilities to query:  
+
+1. **`enum_traits`** Properties of enum types
+2. **`enumerator_traits`** Enumerated values of an enum type
+
+The traits interface is constexpr; runtime facilities can be built on top.  
+These libraries deal only with enumerated *values*, not with *names* of ids.  
+Reflection of names can be dealt with at a higher level.
+
+> See the example repo for full reflection of enum types, including names.
+
+----
+
+## Reflection of enumerated values
+
+A 'brute force' method is used to check possible values of the underlying type.  
+It takes around a second to exhaustively check all 2^16 values of a 16-bit enum  
+(on a decent recent dev box - GCC faster than Clang, MSVC out of the game).
+
+### Support for `underlying_type` bit-widths
+
+Enum types with <= **16-bit** underlying type are fully supported - exhaustive check  
+Enum types with **32-bit** underlying type are partially supported - far from exhaustive.
+
+### **32-bit** underlying type partial support
+
+2^16 values of the same-signed 16-bit integer are checked, plus:
+
+* for **uint32**, check 392 high values (`UINT16_MAX`, `UINT32_MAX`].
+* for **int32**, check 32 negative values [`INT32_MIN`, `INT16_MIN`)  
+  * and 360 high positive values (`INT16_MAX`, `INT32_MAX`].
+
+The 32-bit `Int_MAX` high ranges comprise all values with a contiguous run of set bits.  
+This means that 'flag enums' with contiguous bitfield / bitmask values are supported.
+
+Enum types with **64-bit** underlying type are unsupported, giving a compile error.
+
+----
+
+## Platform support
+
+GCC>=9 is required for a bugfix (earlier versions can be patched).  
+MSVC is work in progress. 8-bit underlying value works.  
+C++17 for auto template parameters, constexpr if, inline variables...
+
+### Disclaimers
+
+Enumerator extraction uses non-standard 'pretty function' preprocessor  
+extensions whose output differs between compilers & compiler versions.  
+This is not a future-proof solution. Use with caution.  
+Test for your use-case and target platforms.
+
+----
 
 ## Build
 
