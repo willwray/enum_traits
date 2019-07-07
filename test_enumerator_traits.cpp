@@ -94,7 +94,7 @@ int main()
 
 static_assert( std::is_same_v<
 
-    decltype(ltl::impl::lo16_int32seq<>()),
+    ltl::impl::Lo16_int32seq,
 
     std::integer_sequence<int32_t,
         INT32_MIN + 0x00000000, INT32_MIN + 0x20000000,
