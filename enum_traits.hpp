@@ -15,14 +15,14 @@
    ^^^^^^^^^^^^^^^
    Targets GCC and Clang with -std=c++17, MSVC with /std:c++17
 
-   ltl::is_scoped_enum<T>;   // Test if type T is a scoped enum.
-   ltl::is_scoped_enum_v<T>; //
+   ltl::is_scoped_enum<T>;    // Is type T a scoped enum? 'Lazy' struct.
+   ltl::is_scoped_enum_v<T>;  // Is type T a scoped enum? bool value.
 
-   ltl::is_fixed_enum<T>;    // Test if type T is a 'fixed' enum, i.e.
-   ltl::is_fixed_enum_v<T>;  // an enum  with fixed underlying type.
+   ltl::is_fixed_enum<T>;     // Test if type T is a 'fixed' enum,
+   ltl::is_fixed_enum_v<T>;   // i.e. an enum  with fixed underlying type.
 
-   ltl::underlying_type<T>;  // c++17 port of c++20's 'SFINAE-friendly'
-                             // std::underlying_type; not enum, no 'type'.
+   ltl::underlying_type<T>;   // c++17 port of c++20's improved UB-free
+   ltl::underlying_type_t<T>; // 'SFINAE-friendly' std::underlying_type.
 
    ltl::to_underlying(e);    // Convenience cast to underlying type P1682.
 
@@ -70,6 +70,8 @@ struct underlying_type<T, true>
 };
 } // impl
 
+// ltl::underlying_type; c++17 backport of c++20's UB-free std::underlying_type
+//
 template <typename T>
 struct underlying_type : impl::underlying_type<T> {};
 
