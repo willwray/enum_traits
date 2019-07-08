@@ -260,7 +260,7 @@ The traits interface is constexpr; runtime facilities can be built on top.
 These libraries deal only with enumerated *values*, not with *names* of ids.  
 Reflection of names can be dealt with at a higher level.
 
-> See the example repo for full reflection of enum types, including names.
+> See the [example repo](https://github.com/willwray/enum_reflect) for full reflection of enum types, including names.
 
 ----
 
