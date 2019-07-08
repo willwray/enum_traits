@@ -225,9 +225,9 @@ permanent authorization for you to choose that version for the
 Library.
 ```
 
-[![License](https://img.shields.io/badge/license-boost%201.0-blue.svg)](https://www.boost.org/LICENSE_1_0.txt)
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 
-Also at [boost.org](http://www.boost.org/LICENSE_1_0.txt) and accompanying file [LICENSE_1_0.txt](LICENSE_1_0.txt)
+Also at [gnu.org](https://www.gnu.org/licenses/lgpl-3.0) and accompanying file [COPYING.LESSER](COPYING.LESSER)
 
 </details>
 
