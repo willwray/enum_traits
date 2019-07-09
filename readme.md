@@ -2,7 +2,7 @@
 
 ## **`enum_traits`** for properties of C / C++ enum types
 
-> C++17. Targets GCC & Clang (MSVC is WIP). Namespace `ltl`.
+> C++11. Targets GCC, Clang and MSVC. Namespace `ltl`.
 
 <details><summary>Copyright &copy; 2019 Will Wray. Distributed under the Boost Software License, V1.0</summary>
 
@@ -41,6 +41,9 @@ Also at [boost.org](http://www.boost.org/LICENSE_1_0.txt) and accompanying file 
 ```C++
   ltl::is_scoped_enum<T>;    // Test if type T is a scoped enum (lazy).
   ltl::is_scoped_enum_v<T>;  // Test if type T is a scoped enum (eager).
+
+  ltl::is_unscoped_enum<T>;    // Test if type T is a unscoped enum (lazy).
+  ltl::is_unscoped_enum_v<T>;  // Test if type T is a unscoped enum (eager).
 
   ltl::is_fixed_enum<T>;     // Test if type T is a 'fixed' enum,
   ltl::is_fixed_enum_v<T>;   // i.e. an enum  with fixed underlying type.

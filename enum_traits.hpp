@@ -13,7 +13,7 @@
 /*
   "enum_traits.hpp": Traits to reflect enum types and enumerator values.
    ^^^^^^^^^^^^^^^
-   Targets GCC and Clang with -std=c++17, MSVC with /std:c++17
+   Targets GCC, Clang and MSVC with enabled c++11 or newer
 
    ltl::is_scoped_enum<T>;    // Is type T a scoped enum? 'Lazy' struct.
    ltl::is_scoped_enum_v<T>;  // Is type T a scoped enum? bool value.
@@ -30,45 +30,75 @@
 
 namespace ltl {
 
-// is_scoped_enum<T>: trait to test if type T is a scoped enum
-//
-template <typename T>
-inline constexpr bool is_scoped_enum_v = [] {
-    if constexpr ( std::is_enum_v<T> )
-        return ! std::is_convertible_v<T, std::underlying_type_t<T>>;
-    else
-        return false;
-}();
-
-template <typename T>
-struct is_scoped_enum : std::bool_constant<is_scoped_enum_v<T>> {};
-
 namespace impl {
+
+template <typename T, bool = std::is_enum<T>::value>
+struct is_scoped_enum : std::false_type {};
+
+template <typename T>
+struct is_scoped_enum<T, true> : std::bool_constant<!std::is_convertible<T, typename std::underlying_type<T>::type>::value> {};
+
+template <typename T, bool = std::is_enum<T>::value>
+struct is_unscoped_enum : std::false_type {};
+
+template <typename T>
+struct is_unscoped_enum<T, true> : std::bool_constant<std::is_convertible<T, typename std::underlying_type<T>::type>::value> {};
+
 template <typename T, typename = T>
-inline constexpr bool is_fixed_enum_v = false;
+struct is_fixed_enum : std::false_type {};
 
 template <typename T>
-inline constexpr bool is_fixed_enum_v<T, decltype(T{0})> = std::is_enum_v<T>;
-} // impl
+struct is_fixed_enum<T, decltype(T{0})> : std::is_enum<T> {};
 
-// is_fixed_enum<T>: trait to test if T is an enum with fixed underlying type
-//
-template <typename T>
-inline constexpr bool is_fixed_enum_v = impl::is_fixed_enum_v<T>;
-
-template <typename T>
-struct is_fixed_enum : std::bool_constant<is_fixed_enum_v<T>> {};
-
-namespace impl {
-template <typename T, bool = std::is_enum_v<T>>
+template <typename T, bool = std::is_enum<T>::value>
 struct underlying_type {};
 
 template <typename T>
 struct underlying_type<T, true>
 {
-    using type = std::underlying_type_t<T>;
+    using type = typename std::underlying_type<T>::type;
 };
-} // impl
+
+} // namespace ltl::impl
+
+// is_scoped_enum<T>: trait to test if type T is a scoped enum
+//
+template <typename T>
+struct is_scoped_enum : impl::is_scoped_enum<T> {};
+
+#if defined(__cpp_variable_templates) && __cpp_variable_templates >= 201304L
+template <typename T>
+#if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
+inline
+#endif
+constexpr bool is_scoped_enum_v = is_scoped_enum<T>::value;
+#endif
+
+// is_unscoped_enum<T>: trait to test if type T is a unscoped enum
+//
+template <typename T>
+struct is_unscoped_enum : impl::is_unscoped_enum<T> {};
+
+#if defined(__cpp_variable_templates) && __cpp_variable_templates >= 201304L
+template <typename T>
+#if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
+inline
+#endif
+constexpr bool is_unscoped_enum_v = is_unscoped_enum<T>::value;
+#endif
+
+// is_fixed_enum<T>: trait to test if T is an enum with fixed underlying type
+//
+template <typename T>
+struct is_fixed_enum : impl::is_fixed_enum<T> {};
+
+#if defined(__cpp_variable_templates) && __cpp_variable_templates >= 201304L
+template <typename T>
+#if defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L
+inline
+#endif
+constexpr bool is_fixed_enum_v = is_fixed_enum<T>::value;
+#endif
 
 // ltl::underlying_type; c++17 backport of c++20's UB-free std::underlying_type
 //
@@ -76,7 +106,7 @@ template <typename T>
 struct underlying_type : impl::underlying_type<T> {};
 
 template <typename T>
-using underlying_type_t = typename impl::underlying_type<T>::type;
+using underlying_type_t = typename underlying_type<T>::type;
 
 // to_underlying(e): convenience cast from enum value e to its underlying type
 //
