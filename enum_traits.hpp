@@ -1,4 +1,5 @@
 //  Copyright (c) 2019 Will Wray https://keybase.io/willwray
+//  Copyright (c) 2019 Daniil Goncharov <neargye@gmail.com>.
 //
 //  Distributed under the Boost Software License, Version 1.0.
 //        http://www.boost.org/LICENSE_1_0.txt
@@ -36,13 +37,19 @@ template <typename T, bool = std::is_enum<T>::value>
 struct is_scoped_enum : std::false_type {};
 
 template <typename T>
-struct is_scoped_enum<T, true> : std::bool_constant<!std::is_convertible<T, typename std::underlying_type<T>::type>::value> {};
+struct is_scoped_enum<T, true>
+    : std::integral_constant<
+          bool, !std::is_convertible<
+                    T, typename std::underlying_type<T>::type>::value> {};
 
 template <typename T, bool = std::is_enum<T>::value>
 struct is_unscoped_enum : std::false_type {};
 
 template <typename T>
-struct is_unscoped_enum<T, true> : std::bool_constant<std::is_convertible<T, typename std::underlying_type<T>::type>::value> {};
+struct is_unscoped_enum<T, true>
+    : std::integral_constant<
+          bool, std::is_convertible<
+                    T, typename std::underlying_type<T>::type>::value> {};
 
 template <typename T, typename = T>
 struct is_fixed_enum : std::false_type {};
